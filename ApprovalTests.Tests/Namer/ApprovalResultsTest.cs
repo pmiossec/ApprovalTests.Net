@@ -9,7 +9,11 @@ namespace ApprovalTests.Tests.Namer
         [Test]
         public void TestEasyNames()
         {
-            Assert.AreEqual("Windows 7", ApprovalResults.TransformEasyOsName("Microsoft Windows 7 Professional N"));
+            // populate from https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions
+            var osversions = new[] { "Microsoft Windows 6.1.7601 S" };
+            Approvals.VerifyAll("EasyNames", osversions, v => $"{v} -> {ApprovalResults.TransformEasyOsName(v)}");
+
+
         }
     }
 }

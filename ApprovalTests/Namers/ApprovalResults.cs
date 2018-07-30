@@ -41,7 +41,7 @@ namespace ApprovalTests.Namers
 
         public static string TransformEasyOsName(string captionName)
         {
-            string[] known = {"XP", "2000", "Vista", "7", "8", "Server 2003", "Server 2008", "Server 2012"};
+            string[] known = {"XP", "2000", "Vista", "7", "8", "10", "Server 2003", "Server 2008", "Server 2012", "Server 2016"};
             var matched = known.FirstOrDefault(s => captionName.StartsWith("Microsoft Windows " + s));
             if (matched != null)
             {

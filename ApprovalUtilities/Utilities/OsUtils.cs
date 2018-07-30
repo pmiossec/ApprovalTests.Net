@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 
 namespace ApprovalUtilities.Utilities
 {
@@ -16,26 +18,28 @@ namespace ApprovalUtilities.Utilities
     {
         public static ApprovalsPlatform GetPlatformId()
         {
-            var platformID = Environment.OSVersion.Platform;
-            if (platformID == PlatformID.MacOSX || platformID == PlatformID.Unix)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                if (Directory.Exists("/Applications") &&
-                    Directory.Exists("/Users") &&
-                    Directory.Exists("/Volumes") &&
-                    Directory.Exists("/System"))
-                {
-                    return ApprovalsPlatform.Mac;
-                }
-                else
-                {
-                    return ApprovalsPlatform.Linux;
-                }
+                return ApprovalsPlatform.Mac;
+
             }
-            return ApprovalsPlatform.Windows;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return ApprovalsPlatform.Linux;
+
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return ApprovalsPlatform.Windows;
+
+            }
+
+            throw new Exception("Unknow Operating System" + RuntimeInformation.OSDescription);
         }
 
         public static string GetFullOsNameFromWmi()
         {
+            //return RuntimeInformation.OSDescription;
             var platformId = GetPlatformId();
             if (platformId == ApprovalsPlatform.Windows)
             {
