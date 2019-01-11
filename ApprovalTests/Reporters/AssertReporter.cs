@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace ApprovalTests.Reporters
 {
-    public class AssertReporter : IEnvironmentAwareReporter
+    public class AssertReporter : IEnvironmentAwareReporter, IIgnoringEndLineApprovalFailureReporter
     {
         protected readonly string areEqual;
         private readonly string assertClass;
@@ -52,6 +52,11 @@ namespace ApprovalTests.Reporters
                 var parameters = new[] { approvedContent, receivedContent };
                 InvokeEqualsMethod(type, parameters);
             }
+            catch (NullReferenceException)
+            {
+                DefaultAssert.Equal(approvedContent, receivedContent, false, ShouldIgnoreLineEndings);
+            }
+            //TODO: handle NRE + make it more reliable calling DefaultAssert
             catch (TargetInvocationException e)
             {
                 throw e.GetBaseException();
@@ -63,5 +68,7 @@ namespace ApprovalTests.Reporters
             var bindingFlags = BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static;
             type.InvokeMember(areEqual, bindingFlags, null, null, parameters);
         }
+
+        public bool ShouldIgnoreLineEndings { get; set; }
     }
 }

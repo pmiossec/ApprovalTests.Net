@@ -4,6 +4,9 @@ using ApprovalTests.Core;
 
 namespace ApprovalTests.Reporters
 {
+    /// <summary>
+    /// Reporter that print the command line to accept all the test results
+    /// </summary>
     public class QuietReporter : IEnvironmentAwareReporter
     {
         public static readonly QuietReporter INSTANCE = new QuietReporter();

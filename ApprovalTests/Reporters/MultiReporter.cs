@@ -5,7 +5,7 @@ using ApprovalTests.Core;
 
 namespace ApprovalTests.Reporters
 {
-    public class MultiReporter : IEnvironmentAwareReporter, IApprovalReporterWithCleanUp
+    public class MultiReporter : IEnvironmentAwareReporter, IApprovalReporterWithCleanUp, IIgnoringEndLineApprovalFailureReporter
     {
         public bool IsWorkingInThisEnvironment(string forFile)
         {
@@ -50,6 +50,20 @@ namespace ApprovalTests.Reporters
             if (lastThrown != null)
             {
                 throw lastThrown;
+            }
+        }
+
+        public bool ShouldIgnoreLineEndings
+        {
+            set
+            {
+                foreach (var reporter in Reporters)
+                {
+                    if (reporter as IIgnoringEndLineApprovalFailureReporter != null)
+                    {
+                        ((IIgnoringEndLineApprovalFailureReporter) reporter).ShouldIgnoreLineEndings = value;
+                    }
+                }
             }
         }
     }
